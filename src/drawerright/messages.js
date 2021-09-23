@@ -42,7 +42,7 @@ export default function EventsPage(props) {
 
       {contextType.token ? (
         <div className="w-100">
-          <Messages allmessagez={mytopic} />
+          <Messages allmessagez={mytopic} openSideBar={props.bringSidebar} />
         </div>
       ) : (
         <p>Unauthorized</p>
