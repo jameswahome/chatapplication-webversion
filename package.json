@@ -3,12 +3,33 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.4.10",
+    "@craco/craco": "^6.2.0",
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
+    "@popperjs/core": "^2.9.3",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "axios": "^0.21.1",
+    "bootstrap": "^5.1.0",
+    "dompurify": "^2.3.1",
+    "draft-convert": "^2.1.12",
+    "graphql": "^15.5.2",
+    "jquery": "^3.6.0",
+    "moment": "^2.29.1",
     "react": "^17.0.2",
+    "react-bootstrap": "^1.6.1",
+    "react-cookie-consent": "^6.3.0",
     "react-dom": "^17.0.2",
+    "react-draft-wysiwyg": "^1.14.7",
+    "react-faq-component": "^1.3.1",
+    "react-icons": "^4.2.0",
+    "react-notifications-component": "^3.1.0",
+    "react-phone-number-input": "^3.1.26",
+    "react-router-dom": "^5.2.1",
     "react-scripts": "4.0.3",
+    "subscriptions-transport-ws": "^0.9.19",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.4",
     "workbox-broadcast-update": "^5.1.4",
@@ -24,9 +45,9 @@
     "workbox-streams": "^5.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -46,5 +67,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.8.6",
+    "postcss": "^7.0.36",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.9"
   }
 }
