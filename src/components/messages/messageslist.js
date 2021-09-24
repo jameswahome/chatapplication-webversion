@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import AuthContext from "../../context/auth-context";
 import moment from "moment";
 import { Link } from "react-router-dom";
@@ -29,6 +29,7 @@ const createMarkup = (html) => {
   }
 };
 const MessagesList = (props) => {
+  const [inputMessage, setInputMessage] = useState("");
   const AllMessages = props.allmessagez;
   const contextType = useContext(AuthContext);
   const sortedMessages = AllMessages.slice().sort((a, b) => {
@@ -39,11 +40,15 @@ const MessagesList = (props) => {
   });
   const mytopic = sortedMessages;
 
+  const handleInputChange = (event) => {
+    setInputMessage(event.target.value);
+  };
+
   return (
     <div className="col-span-full xl:col-span-6 bg-white shadow-lg rounded-sm border border-gray-200">
       <div className="h-screen bg-white">
-        <div className="flex justify-center  h-screen ">
-          <div className="w-full h-4/5 bg-white rounded shadow-2xl">
+        <div className="  h-screen ">
+          <div className="w-full h-screen bg-white rounded shadow-2xl">
             <nav className="w-full h-10 bg-blue rounded-tr rounded-tl flex justify-between items-center">
               <div className="flex justify-center items-center">
                 {" "}
@@ -223,67 +228,73 @@ const MessagesList = (props) => {
                 {" "}
               </div>
             </div>
-            <div className="flex justify-between items-center  ">
-              <div className="relative flex rounded-full bg-blue">
+          </div>
+          <div className="flex justify-between items-center absolute bottom-2 left-0 w-full pl-2 pr-4">
+            <div className="relative flex rounded-full bg-gray-400 w-full">
+              {/* emoji icon */}
+              <svg
+                className="w-8 h-8 mt-1"
+                fill="white"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              {/* attachment icon */}
+              <svg
+                className="w-8 h-8 mt-1 "
+                fill="white"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                />
+              </svg>
+              <input
+                type="text"
+                className=" pl-2  py-2 focus:outline-none h-auto overflow-auto  w-full bg-gray-400 placeholder-gray-100  text-white"
+                placeholder="Type a message..."
+                onChange={handleInputChange}
+                value={inputMessage}
+              />{" "}
+              {/* image icon */}
+              <svg
+                className="w-8 h-8 mt-1"
+                fill="white"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </div>
+            {inputMessage === "" ? (
+              <div className="w-7 h-7 rounded-full bg-gray-400 text-center items-center flex justify-center hover:bg-gray-900 hover:text-white">
                 {" "}
                 <svg
-                  className="w-6 h-6 mt-2"
-                  fill="white"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <input
-                  type="text"
-                  className=" pl-2 pr-1 py-2 focus:outline-none h-auto overflow-auto  bg-blue placeholder-gray-100  text-white"
-                  placeholder="Type a message..."
-                />{" "}
-                <svg
-                  className="w-6 h-6 mt-2 "
-                  fill="white"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
-                  />
-                </svg>
-                <svg
-                  className="w-6 h-6 mt-2"
-                  fill="white"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </div>
-              <div className="w-7 h-7 rounded-full bg-blue text-center items-center flex justify-center hover:bg-gray-900 hover:text-white">
-                {" "}
-                <svg
-                  className="w-6 h-6 mt-2"
+                  className="w-8 h-8 mt-1"
                   fill="white"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -297,14 +308,15 @@ const MessagesList = (props) => {
                   />
                 </svg>{" "}
               </div>
-              <div className="w-7 h-7 rounded-full bg-blue text-center items-center flex justify-center">
+            ) : (
+              <div className="w-7 h-7 rounded-full bg-gray-400 text-center items-center flex justify-center">
                 {" "}
                 <button
                   className="w-7 h-7 rounded-full text-center items-center flex justify-center focus:outline-none hover:bg-gray-900 hover:text-white"
                   onClick={() => {}}
                 >
                   <svg
-                    className="w-6 h-6"
+                    className="w-8 h-8"
                     fill="white"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -319,7 +331,7 @@ const MessagesList = (props) => {
                   </svg>{" "}
                 </button>{" "}
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

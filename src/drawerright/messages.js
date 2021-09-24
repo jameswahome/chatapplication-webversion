@@ -41,7 +41,7 @@ export default function EventsPage(props) {
       {(isOpen || selectedEvent) && <Backdrop />}
 
       {contextType.token ? (
-        <div className="w-100">
+        <div className="">
           <Messages allmessagez={mytopic} openSideBar={props.bringSidebar} />
         </div>
       ) : (

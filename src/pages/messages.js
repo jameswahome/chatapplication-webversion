@@ -30,10 +30,8 @@ const EventsPage = (props) => {
 
         {/* Content area */}
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-          <main>
-            <Container>
-              {messages === true && <Messages bringSidebar={setSidebarOpen} />}
-            </Container>
+          <main className="pl-1 pr-1">
+            {messages === true && <Messages bringSidebar={setSidebarOpen} />}
           </main>
         </div>
       </div>
