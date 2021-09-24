@@ -6,8 +6,6 @@ import { gql, useQuery } from "@apollo/client";
 import Messages from "./pages/messages";
 import MessageslPage from "./pages/singlemessagecomments";
 import ProfilePage from "./pages/profile";
-import AboutPage from "./pages/About";
-import FAQPage from "./pages/FAQ";
 import AuthPage from "./pages/Auth";
 import MessageLayout from "./pages/MessagesLayout";
 import AuthContext from "./context/auth-context";
@@ -95,8 +93,6 @@ export default function App() {
             {!token && <Route path="/auth" component={AuthPage} />}
             <Route path="/index" component={Messages} />
 
-            <Route path="/About" component={AboutPage} />
-            <Route path="/FAQ" component={FAQPage} />
             <Route path="/sm/:messageId" component={MessageslPage} />
             <Route path="/profile/:creatorId" component={ProfilePage} />
             <Route
