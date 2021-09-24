@@ -47,36 +47,38 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setalltickets, setmessages }) {
       <div
         id="sidebar"
         ref={sidebar}
-        className={`absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-full flex-shrink-0 bg-white transition-transform duration-200 ease-in-out pt-4 ${
+        className={`absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-full flex-shrink-0 bg-blue transition-transform duration-200 ease-in-out pt-4 rounded-md ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Sidebar header */}
-        <div className="flex justify-between mb-10 pr-3 sm:px-2">
-          <img
-            src="https://i.imgur.com/aq39RMA.jpg"
-            className="rounded-full h-8 w-8 ml-2"
-            alt="img"
-          />
-
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+        <div className=" ">
+          {/* Sidebar header */}
+          <div className="flex justify-between mb-10 pr-3 sm:px-2 ">
+            <img
+              src="https://i.imgur.com/aq39RMA.jpg"
+              className="rounded-full h-8 w-8 ml-2"
+              alt="img"
             />
-          </svg>
+
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+              />
+            </svg>
+          </div>
         </div>
 
         {/* Links */}
-        <div>
+        <div className=" h-screen bg-white rounded-md overflow-auto">
           <div className="w-full  ">
             <div className="relative">
               {" "}

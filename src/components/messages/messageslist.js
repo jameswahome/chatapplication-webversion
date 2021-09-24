@@ -230,12 +230,12 @@ const MessagesList = (props) => {
             </div>
           </div>
           <div className="flex justify-between items-center absolute bottom-2 left-0 w-full pl-2 pr-4">
-            <div className="relative flex rounded-full bg-gray-400 w-full">
+            <div className="relative flex rounded-full bg-blue w-full">
               {/* emoji icon */}
               <svg
                 className="w-8 h-8 mt-1"
-                fill="white"
-                stroke="currentColor"
+                fill="transparent"
+                stroke="black"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -248,9 +248,9 @@ const MessagesList = (props) => {
               </svg>
               {/* attachment icon */}
               <svg
-                className="w-8 h-8 mt-1 "
-                fill="white"
-                stroke="currentColor"
+                className="w-8 h-8 mt-1 ml-1"
+                fill="transparent"
+                stroke="black"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -263,16 +263,16 @@ const MessagesList = (props) => {
               </svg>
               <input
                 type="text"
-                className=" pl-2  py-2 focus:outline-none h-auto overflow-auto  w-full bg-gray-400 placeholder-gray-100  text-white"
+                className=" pl-2  py-2 focus:outline-none h-auto overflow-auto  w-full bg-blue placeholder-gray-100  text-white"
                 placeholder="Type a message..."
                 onChange={handleInputChange}
                 value={inputMessage}
               />{" "}
               {/* image icon */}
               <svg
-                className="w-8 h-8 mt-1"
-                fill="white"
-                stroke="currentColor"
+                className="w-8 h-8 mt-1 mr-2"
+                fill="transparent"
+                stroke="black"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -291,12 +291,12 @@ const MessagesList = (props) => {
               </svg>
             </div>
             {inputMessage === "" ? (
-              <div className="w-7 h-7 rounded-full bg-gray-400 text-center items-center flex justify-center hover:bg-gray-900 hover:text-white">
+              <div className="w-7 h-7 rounded-full bg-blue text-center items-center flex justify-center hover:bg-gray-900 hover:text-white">
                 {" "}
                 <svg
                   className="w-8 h-8 mt-1"
-                  fill="white"
-                  stroke="currentColor"
+                  fill="transparent"
+                  stroke="black"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -309,7 +309,7 @@ const MessagesList = (props) => {
                 </svg>{" "}
               </div>
             ) : (
-              <div className="w-7 h-7 rounded-full bg-gray-400 text-center items-center flex justify-center">
+              <div className="w-7 h-7 rounded-full bg-blue-400 text-center items-center flex justify-center">
                 {" "}
                 <button
                   className="w-7 h-7 rounded-full text-center items-center flex justify-center focus:outline-none hover:bg-gray-900 hover:text-white"
@@ -317,8 +317,8 @@ const MessagesList = (props) => {
                 >
                   <svg
                     className="w-8 h-8"
-                    fill="white"
-                    stroke="currentColor"
+                    fill="transparent"
+                    stroke="black"
                     viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg"
                   >
