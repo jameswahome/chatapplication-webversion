@@ -30,12 +30,7 @@ export default function Personalprofile(props) {
       email
       profileimage
       lastseen
-      createdTopics{
-        title
-        }
-        role{
-          role
-        }   
+       
     createdAt
 
     }

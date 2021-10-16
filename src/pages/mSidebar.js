@@ -1,11 +1,13 @@
-import React, { useEffect, useRef, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { gql, useQuery } from "@apollo/client";
 import AuthContext from "../context/auth-context";
-function Sidebar({ sidebarOpen, setSidebarOpen, setalltickets, setmessages }) {
-  const history = useHistory();
+import Spinner from "../components/spinner/spinner";
+
+function Sidebar({ sidebarOpen, setSidebarOpen, setContacts }) {
   const trigger = useRef(null);
   const sidebar = useRef(null);
   const contextType = useContext(AuthContext);
+  const [dropItDown, setDropItDown] = useState(false);
 
   // close on click outside
   useEffect(() => {
@@ -33,6 +35,58 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setalltickets, setmessages }) {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
+  const allMessages = gql`
+    query {
+      usersMessages {
+        _id
+        body
+        creator {
+          username
+          profileimage
+        }
+        createdAt
+        updatedAt
+        messageslist {
+          body
+        }
+      }
+    }
+  `;
+
+  const usersprofile = gql`
+  query{
+    oneuser(username: "${contextType.username}"){
+      _id
+      profileimage
+    }
+  }
+`;
+
+  function FetchUsersProfile() {
+    const { loading, error, data } = useQuery(usersprofile);
+    if (loading) return <Spinner />;
+    if (error) return `Error! ${error} `;
+
+    return data.oneuser;
+  }
+
+  const user = FetchUsersProfile();
+
+  const { loading, error, data } = useQuery(allMessages);
+  if (loading) return <Spinner />;
+  if (error) return `Error! ${error} `;
+
+  const myMessages = data.usersMessages;
+
+  const sortedMessages = myMessages.slice().sort((a, b) => {
+    const dateA = new Date(b.updatedAt);
+    const DateB = new Date(a.updatedAt);
+
+    return dateA - DateB;
+  });
+
+  const contactListLength = sortedMessages.length;
+
   return (
     <div className="lg:w-80">
       {/* Sidebar backdrop (mobile only) */}
@@ -54,33 +108,91 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setalltickets, setmessages }) {
         <div className=" ">
           {/* Sidebar header */}
           <div className="flex justify-between mb-10 pr-3 sm:px-2 ">
-            <img
-              src="https://i.imgur.com/aq39RMA.jpg"
-              className="rounded-full h-8 w-8 ml-2"
-              alt="img"
-            />
-
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+            {user.profileimage === null ? (
+              <img
+                src="https://res.cloudinary.com/jaymojay/image/upload/v1634151683/24-248253_user-profile-default-image-png-clipart-png-download_qm0dl0.png"
+                className="rounded-full h-8 w-8"
+                alt="img"
               />
-            </svg>
+            ) : (
+              <img
+                src={user.profileimage}
+                className="rounded-full h-8 w-8"
+                alt="img"
+              />
+            )}
+            <div className="text-white">Chat Application</div>
+            <div className="flex space-x-3">
+              {/* contact list */}
+              <button
+                className="items-center justify-center "
+                onClick={() => setContacts(true)}
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                  />
+                </svg>
+              </button>
+
+              {/* settings */}
+              <button
+                className="items-center justify-center "
+                onClick={() => setDropItDown(true)}
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Links */}
+        {dropItDown && (
+          <div className="absolute right-7 w-32 py-2 top-16 bg-white border rounded shadow-xl">
+            <button
+              className="transition-colors duration-200 block px-4  text-normal text-gray-900 rounded hover:bg-blue hover:text-white no-underline"
+              onClick={() => setDropItDown(false)}
+            >
+              {" "}
+              Settings
+            </button>
+            <div className="">
+              <hr></hr>
+            </div>
+            <button
+              className="transition-colors duration-200 block px-4  text-normal text-gray-900 rounded hover:bg-blue hover:text-white no-underline"
+              onClick={() => setDropItDown(false)}
+            >
+              Logout
+            </button>
+          </div>
+        )}
+
+        {/* conversations */}
         <div className=" h-screen bg-white rounded-md overflow-auto">
           <div className="w-full  ">
-            <div className="relative">
+            <div className="">
               {" "}
               <input
                 type="text"
@@ -88,7 +200,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setalltickets, setmessages }) {
                 placeholder="Search..."
               />{" "}
               <svg
-                className="w-5 h-5 absolute right-3 top-3 text-gray-300"
+                className="w-5 h-5 absolute right-2 top-28 text-gray-300 "
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -103,180 +215,68 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setalltickets, setmessages }) {
               </svg>
             </div>
             <ul className="pl-2">
-              <li className="flex justify-between mt-2 pt-2 bg-white  hover:shadow-lg rounded cursor-pointer transition">
-                <button
-                  onClick={() => setSidebarOpen(false)}
-                  className="w-full"
-                >
-                  <div className="flex ">
-                    {" "}
-                    <img
-                      src="https://i.imgur.com/aq39RMA.jpg"
-                      className="rounded-full h-8 w-8"
-                      alt="img"
-                    />
-                    <div className="flex flex-col ml-2">
-                      {" "}
-                      <span className="font-medium text-black">
-                        Jessica Koel
-                      </span>{" "}
-                      <span className="text-sm text-gray-400 truncate w-32">
-                        Hey, Joel, I here to help you out please tell me
-                      </span>{" "}
-                    </div>
-                  </div>
-                </button>
-                <div className="flex flex-col ">
-                  {" "}
-                  <span className="text-gray-300">11:26</span>{" "}
-                  <i className="fa fa-star text-green-400"></i>{" "}
+              {contactListLength.length !== 0 ? (
+                <>
+                  {sortedMessages.map((customer) => {
+                    const lastMessage = customer.messageslist.length - 1;
+                    return (
+                      <li
+                        key={customer._id}
+                        className="flex justify-between mt-2 pt-2 bg-white  hover:shadow-lg rounded cursor-pointer transition"
+                      >
+                        <button
+                          onClick={() => setSidebarOpen(false)}
+                          className="w-full"
+                        >
+                          <div className="flex ">
+                            {" "}
+                            {customer.creator.profileimage === null ? (
+                              <img
+                                src="https://res.cloudinary.com/jaymojay/image/upload/v1634151683/24-248253_user-profile-default-image-png-clipart-png-download_qm0dl0.png"
+                                className="rounded-full h-8 w-8"
+                                alt="img"
+                              />
+                            ) : (
+                              <img
+                                src={customer.creator.profileimage}
+                                className="rounded-full h-8 w-8"
+                                alt="img"
+                              />
+                            )}
+                            <div className="flex flex-col ml-2">
+                              {" "}
+                              <span className="font-medium text-black -ml-16">
+                                {customer.creator.username}
+                              </span>{" "}
+                              {customer.messageslist[lastMessage] ===
+                              undefined ? (
+                                <span className="text-sm text-gray-400 truncate w-32">
+                                  {customer.body}
+                                </span>
+                              ) : (
+                                <span className="text-sm text-gray-400 truncate w-32">
+                                  {customer.messageslist[lastMessage].body}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </button>
+                        <div className="flex flex-col ">
+                          {" "}
+                          <span className="text-gray-300">11:26</span>{" "}
+                          <i className="fa fa-star text-green-400"></i>{" "}
+                        </div>
+                      </li>
+                    );
+                  })}{" "}
+                </>
+              ) : (
+                <div className="justify-center items-center absolute bottom-1/2 left-20">
+                  <button onClick={() => setContacts(true)}>
+                    <i className="font-serif">start a new conversation</i>
+                  </button>
                 </div>
-              </li>
-              <li className="flex justify-between  bg-white mt-2 pt-2 hover:shadow-lg rounded cursor-pointer transition">
-                <button
-                  onClick={() => setSidebarOpen(false)}
-                  className="w-full"
-                >
-                  <div className="flex ">
-                    {" "}
-                    <img
-                      src="https://i.imgur.com/eMaYwXn.jpg"
-                      className="rounded-full h-8 w-8"
-                      alt="img"
-                    />
-                    <div className="flex flex-col ml-2">
-                      {" "}
-                      <span className="font-medium text-black">
-                        Komeial Bolger
-                      </span>{" "}
-                      <span className="text-sm text-gray-400 truncate w-32">
-                        I will send you all documents as soon as possible
-                      </span>{" "}
-                    </div>
-                  </div>
-                </button>
-                <div className="flex flex-col ">
-                  {" "}
-                  <span className="text-gray-300">12:26</span>{" "}
-                  <i className="fa fa-star text-green-400"></i>{" "}
-                </div>
-              </li>
-              <li className="flex justify-between  bg-white mt-2 pt-2 hover:shadow-lg rounded cursor-pointer transition">
-                <button
-                  onClick={() => setSidebarOpen(false)}
-                  className="w-full"
-                >
-                  <div className="flex ">
-                    {" "}
-                    <img
-                      src="https://i.imgur.com/zQZSWrt.jpg"
-                      className="rounded-full h-8 w-8"
-                      alt="img"
-                    />
-                    <div className="flex flex-col ml-2">
-                      {" "}
-                      <span className="font-medium text-black">
-                        Tamaara Suiale
-                      </span>{" "}
-                      <span className="text-sm text-gray-400 truncate w-32">
-                        Are you going to business trip next week
-                      </span>{" "}
-                    </div>
-                  </div>
-                </button>
-                <div className="flex flex-col ">
-                  {" "}
-                  <span className="text-gray-300">8:26</span>{" "}
-                  <i className="fa fa-star text-green-400"></i>{" "}
-                </div>
-              </li>
-              <li className="flex justify-between  bg-white mt-2 pt-2 hover:shadow-lg rounded cursor-pointer transition">
-                <button
-                  onClick={() => setSidebarOpen(false)}
-                  className="w-full"
-                >
-                  <div className="flex ">
-                    {" "}
-                    <img
-                      src="https://i.imgur.com/agRGhBc.jpg"
-                      className="rounded-full h-8 w-8"
-                      alt="img"
-                    />
-                    <div className="flex flex-col ml-2">
-                      {" "}
-                      <span className="font-medium text-black">
-                        Sam Nielson
-                      </span>{" "}
-                      <span className="text-sm text-gray-400 truncate w-32">
-                        I suggest to start new business soon
-                      </span>{" "}
-                    </div>
-                  </div>
-                </button>
-                <div className="flex flex-col ">
-                  {" "}
-                  <span className="text-gray-300">7:16</span>{" "}
-                  <i className="fa fa-star text-green-400"></i>{" "}
-                </div>
-              </li>
-              <li className="flex justify-between  bg-white mt-2 pt-2 hover:shadow-lg rounded cursor-pointer transition">
-                <button
-                  onClick={() => setSidebarOpen(false)}
-                  className="w-full"
-                >
-                  <div className="flex ">
-                    {" "}
-                    <img
-                      src="https://i.imgur.com/uIgDDDd.jpg"
-                      className="rounded-full h-8 w-8"
-                      alt="img"
-                    />
-                    <div className="flex flex-col ml-2">
-                      {" "}
-                      <span className="font-medium text-black">
-                        Caroline Nexon
-                      </span>{" "}
-                      <span className="text-sm text-gray-400 truncate w-32">
-                        We need to start new reseatch center.
-                      </span>{" "}
-                    </div>
-                  </div>
-                </button>
-                <div className="flex flex-col ">
-                  {" "}
-                  <span className="text-gray-300">9:26</span>{" "}
-                  <i className="fa fa-star text-green-400"></i>{" "}
-                </div>
-              </li>
-              <li className="flex justify-between items-center bg-white mt-2 pt-2 hover:shadow-lg rounded cursor-pointer transition">
-                <button
-                  onClick={() => setSidebarOpen(false)}
-                  className="w-full"
-                >
-                  <div className="flex ">
-                    {" "}
-                    <img
-                      src="https://i.imgur.com/tT8rjKC.jpg"
-                      className="rounded-full h-8 w-8"
-                      alt="img"
-                    />
-                    <div className="flex flex-col ml-2">
-                      {" "}
-                      <span className="font-medium text-black">
-                        Patrick Koeler
-                      </span>{" "}
-                      <span className="text-sm text-gray-400 truncate w-32 ml-0">
-                        May be yes
-                      </span>{" "}
-                    </div>
-                  </div>
-                </button>
-                <div className="flex flex-col ">
-                  {" "}
-                  <span className="text-gray-300">3:26</span>{" "}
-                  <i className="fa fa-star text-green-400"></i>{" "}
-                </div>
-              </li>
+              )}
             </ul>
           </div>
         </div>

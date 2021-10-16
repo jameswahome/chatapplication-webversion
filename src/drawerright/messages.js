@@ -15,7 +15,6 @@ export default function EventsPage(props) {
     query {
       usersMessages {
         _id
-        title
         body
         creator {
           username
