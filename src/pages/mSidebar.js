@@ -37,18 +37,20 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts }) {
 
   const allMessages = gql`
     query {
-      usersMessages {
+      usersMessageList {
         _id
-        body
-        creator {
+        messageslists {
+          body
+        }
+        user {
+          username
+        }
+        receiver {
           username
           profileimage
         }
         createdAt
         updatedAt
-        messageslist {
-          body
-        }
       }
     }
   `;
@@ -76,7 +78,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts }) {
   if (loading) return <Spinner />;
   if (error) return `Error! ${error} `;
 
-  const myMessages = data.usersMessages;
+  const myMessages = data.usersMessageList;
 
   const sortedMessages = myMessages.slice().sort((a, b) => {
     const dateA = new Date(b.updatedAt);
@@ -218,7 +220,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts }) {
               {contactListLength.length !== 0 ? (
                 <>
                   {sortedMessages.map((customer) => {
-                    const lastMessage = customer.messageslist.length - 1;
+                    const lastMessage = customer.messageslists.length - 1;
                     return (
                       <li
                         key={customer._id}
@@ -229,8 +231,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts }) {
                           className="w-full"
                         >
                           <div className="flex ">
-                            {" "}
-                            {customer.creator.profileimage === null ? (
+                            {customer.receiver.profileimage === null ? (
                               <img
                                 src="https://res.cloudinary.com/jaymojay/image/upload/v1634151683/24-248253_user-profile-default-image-png-clipart-png-download_qm0dl0.png"
                                 className="rounded-full h-8 w-8"
@@ -238,7 +239,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts }) {
                               />
                             ) : (
                               <img
-                                src={customer.creator.profileimage}
+                                src={customer.receiver.profileimage}
                                 className="rounded-full h-8 w-8"
                                 alt="img"
                               />
@@ -246,16 +247,16 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts }) {
                             <div className="flex flex-col ml-2">
                               {" "}
                               <span className="font-medium text-black -ml-16">
-                                {customer.creator.username}
-                              </span>{" "}
-                              {customer.messageslist[lastMessage] ===
+                                {customer.receiver.username}
+                              </span>
+                              {customer.messageslists[lastMessage] ===
                               undefined ? (
-                                <span className="text-sm text-gray-400 truncate w-32">
+                                <span className="text-sm text-gray-400 truncate w-32 ">
                                   {customer.body}
                                 </span>
                               ) : (
                                 <span className="text-sm text-gray-400 truncate w-32">
-                                  {customer.messageslist[lastMessage].body}
+                                  {customer.messageslists[lastMessage].body}
                                 </span>
                               )}
                             </div>

@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { Container } from "@material-ui/core";
 import AuthContext from "../context/auth-context";
 import Messages from "../drawerright/messages";
 import "./events.css";

@@ -16,32 +16,71 @@ export default function EventsPage(props) {
       usersMessages {
         _id
         body
+        user {
+          username
+          profileimage
+        }
         creator {
           username
           profileimage
         }
         createdAt
         updatedAt
-        messageslist {
-          body
+      }
+    }
+  `;
+
+  const MessageSubscription = gql`
+    subscription {
+      newmessages {
+        _id
+        body
+        creator {
+          username
+          profileimage
+        }
+        createdAt
+        updatedAt
+        user {
+          username
+          profileimage
         }
       }
     }
   `;
 
-  const { loading, error, data } = useQuery(allMessages);
+  const { loading, error, data, subscribeToMore } = useQuery(allMessages);
   if (loading) return <Spinner />;
   if (error) return `Error! ${error} `;
 
-  const mytopic = data.usersMessages;
+  const myConversation = data.usersMessages;
 
+  const subscribeToNewTopics = () => {
+    subscribeToMore({
+      document: MessageSubscription,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newFeedItem = subscriptionData.data.newmessages;
+
+        return Object.assign({}, prev, {
+          usersMessages: {
+            usersMessages: [newFeedItem, prev.usersMessages],
+          },
+        });
+      },
+    });
+  };
+  subscribeToNewTopics();
   return (
     <React.Fragment>
       {(isOpen || selectedEvent) && <Backdrop />}
 
       {contextType.token ? (
         <div className="">
-          <Messages allmessagez={mytopic} openSideBar={props.bringSidebar} />
+          <Messages
+            allmessagez={myConversation}
+            openSideBar={props.bringSidebar}
+          />
         </div>
       ) : (
         <p>Unauthorized</p>
