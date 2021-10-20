@@ -32,7 +32,7 @@ const MessagesList = (props) => {
     <div className="col-span-full xl:col-span-6 bg-white shadow-lg rounded-sm border border-gray-200">
       <div className="h-screen bg-white">
         <div className="  h-screen ">
-          <div className="w-full h-screen bg-white rounded shadow-2xl">
+          <div className="w-full h-screen bg-white rounded shadow-2xl ">
             <nav className="w-full h-10 bg-blue rounded-tr rounded-tl flex justify-between items-center">
               <div className="flex justify-center items-center">
                 {" "}
@@ -121,7 +121,7 @@ const MessagesList = (props) => {
                 </svg>
               </div>
             </nav>
-            <div className="overflow-auto px-1 py-1 h-full">
+            <div className="overflow-auto px-1 py-1 h-5/6">
               {myConversations.map((conversation) => {
                 return (
                   <li key={conversation._id} className="list-none">

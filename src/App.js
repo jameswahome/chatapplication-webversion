@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import "./App.css";
 import { gql, useQuery } from "@apollo/client";
 import Messages from "./pages/messages";
-import MessageslPage from "./pages/singlemessagecomments";
 import ProfilePage from "./pages/profile";
 import AuthPage from "./pages/Auth";
 import MessageLayout from "./pages/MessagesLayout";
@@ -93,7 +92,6 @@ export default function App() {
             {!token && <Route path="/auth" component={AuthPage} />}
             <Route path="/index" component={Messages} />
 
-            <Route path="/sm/:messageId" component={MessageslPage} />
             <Route path="/profile/:creatorId" component={ProfilePage} />
             <Route
               path="/personalprofile/:creatorId"
