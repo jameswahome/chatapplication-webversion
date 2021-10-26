@@ -1,10 +1,10 @@
-import React, { useContext, useState } from 'react';
-import { gql, useQuery } from '@apollo/client';
-import Backdrop from '../components/Backdrop/backdrop';
-import Messages from '../components/messages/messageslist';
-import AuthContext from '../context/auth-context';
-import Spinner from '../components/spinner/spinner';
-import './../index.css';
+import React, { useContext, useState } from "react";
+import { gql, useQuery } from "@apollo/client";
+import Backdrop from "../components/Backdrop/backdrop";
+import Messages from "../components/messages/messageslist";
+import AuthContext from "../context/auth-context";
+import Spinner from "../components/spinner/spinner";
+import "./../index.css";
 
 export default function EventsPage(props) {
   const contextType = useContext(AuthContext);
@@ -45,7 +45,7 @@ export default function EventsPage(props) {
     <React.Fragment>
       {(isOpen || selectedEvent) && <Backdrop />}
 
-      {contextType.role !== 'admin' ? (
+      {contextType.role !== "admin" ? (
         <p>Unauthorized</p>
       ) : (
         <div>

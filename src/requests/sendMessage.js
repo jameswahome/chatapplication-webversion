@@ -20,7 +20,7 @@ const modalConfirmHandler = ({ text, inputUsername }) => {
     },
   };
 
-  fetch("http://localhost:8080/api", {
+  fetch("https://apimarketpalace.com/api", {
     method: "POST",
     body: JSON.stringify(requestBody),
     headers: {

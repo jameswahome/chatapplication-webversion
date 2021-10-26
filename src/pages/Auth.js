@@ -99,7 +99,7 @@ export default function AuthPage() {
       },
     };
 
-    fetch("http://localhost:8080/api", {
+    fetch("https://apimarketpalace.com/api", {
       method: "POST",
       body: JSON.stringify(requestBody),
       headers: {
@@ -202,7 +202,7 @@ export default function AuthPage() {
       },
     };
 
-    fetch("http://localhost:8080/api", {
+    fetch("https://apimarketpalace.com/api", {
       method: "POST",
       body: JSON.stringify(requestBody),
       headers: {

@@ -11,9 +11,9 @@ const EventsPage = (props) => {
   const contextType = useContext(AuthContext);
   const [alltickets, setalltickets] = useState(false);
   const [messages, setmessages] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [contacts, setContacts] = useState(false);
-
+  const [tapUser, setTapUser] = useState("");
   // const [AppBar, setAppBar] = useState('Messages');
 
   function AdminDashboard() {
@@ -29,6 +29,7 @@ const EventsPage = (props) => {
             setalltickets={setalltickets}
             setmessages={setmessages}
             setContacts={setContacts}
+            setTapUser={setTapUser}
           />
         ) : (
           /* chat list */
@@ -39,13 +40,20 @@ const EventsPage = (props) => {
             setalltickets={setalltickets}
             setmessages={setmessages}
             setContacts={setContacts}
+            setTapUser={setTapUser}
           />
         )}
 
         {/* Content area */}
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <main className="pl-1 pr-1">
-            {messages === true && <Messages bringSidebar={setSidebarOpen} />}
+            {messages === true && (
+              <Messages
+                bringSidebar={setSidebarOpen}
+                userId={tapUser}
+                setContacts={setContacts}
+              />
+            )}
           </main>
         </div>
       </div>

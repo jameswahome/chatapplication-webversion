@@ -3,7 +3,7 @@ import { gql, useQuery } from "@apollo/client";
 import AuthContext from "../context/auth-context";
 import Spinner from "../components/spinner/spinner";
 
-function Sidebar({ sidebarOpen, setSidebarOpen, setContacts }) {
+function Sidebar({ sidebarOpen, setSidebarOpen, setContacts, setTapUser }) {
   const trigger = useRef(null);
   const sidebar = useRef(null);
   const contextType = useContext(AuthContext);
@@ -44,10 +44,12 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts }) {
         }
         user {
           username
+          profileimage
         }
         receiver {
           username
           profileimage
+          _id
         }
         createdAt
         updatedAt
@@ -63,6 +65,31 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts }) {
     }
   }
 `;
+  const MessageSubscription = gql`
+    subscription {
+      newmessageList {
+        user {
+          username
+          _id
+        }
+        receiver {
+          username
+          _id
+        }
+        messageslists {
+          body
+          user {
+            username
+            profileimage
+          }
+          creator {
+            username
+            profileimage
+          }
+        }
+      }
+    }
+  `;
 
   function FetchUsersProfile() {
     const { loading, error, data } = useQuery(usersprofile);
@@ -74,11 +101,27 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts }) {
 
   const user = FetchUsersProfile();
 
-  const { loading, error, data } = useQuery(allMessages);
+  const { loading, error, data, subscribeToMore } = useQuery(allMessages);
   if (loading) return <Spinner />;
   if (error) return `Error! ${error} `;
 
   const myMessages = data.usersMessageList;
+  const subscribeToNewTopics = () => {
+    subscribeToMore({
+      document: MessageSubscription,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newFeedItem = subscriptionData.data.newmessageList;
+
+        return Object.assign({}, prev, {
+          usersMessageList: {
+            usersMessageList: [newFeedItem, prev.usersMessageList],
+          },
+        });
+      },
+    });
+  };
+  subscribeToNewTopics();
 
   const sortedMessages = myMessages.slice().sort((a, b) => {
     const dateA = new Date(b.updatedAt);
@@ -221,13 +264,17 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts }) {
                 <>
                   {sortedMessages.map((customer) => {
                     const lastMessage = customer.messageslists.length - 1;
+
                     return (
                       <li
                         key={customer._id}
                         className="flex justify-between mt-2 pt-2 bg-white  hover:shadow-lg rounded cursor-pointer transition"
                       >
                         <button
-                          onClick={() => setSidebarOpen(false)}
+                          onClick={() => {
+                            setSidebarOpen(false);
+                            setTapUser(customer.receiver._id);
+                          }}
                           className="w-full"
                         >
                           <div className="flex ">

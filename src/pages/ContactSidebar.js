@@ -3,12 +3,7 @@ import { gql, useQuery } from "@apollo/client";
 import AuthContext from "../context/auth-context";
 import Spinner from "../components/spinner/spinner";
 
-function ContactList({
-  sidebarOpen,
-  setSidebarOpen,
-
-  setContacts,
-}) {
+function ContactList({ sidebarOpen, setSidebarOpen, setTapUser, setContacts }) {
   const trigger = useRef(null);
   const sidebar = useRef(null);
   const contextType = useContext(AuthContext);
@@ -82,6 +77,66 @@ function ContactList({
     }
     return result;
   }, []);
+
+  const confirmHandler = (inputUsername) => {
+    console.log(inputUsername);
+    //check if they're  fields which are null
+    if (inputUsername.trim().length === 0) {
+      throw new Error("all fields are required");
+    }
+
+    //post to the database
+    const requestBody = {
+      query: `
+            mutation CreateEvent(  $username: ID! ) {
+               CreateMessageList(receiver:$username){
+                  
+                  receiver{
+                    _id
+                    username
+                    email
+                  }
+                  
+                  updatedAt
+                  createdAt
+                  _id
+                }
+              }
+          `,
+      variables: {
+        username: inputUsername,
+      },
+    };
+
+    fetch("https://apimarketpalace.com/api", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      credentials: "include",
+    })
+      .then((res) => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed");
+        }
+        return res.json();
+      })
+      .then((resData) => {
+        if (resData.data !== null) {
+          console.log(resData.data.CreateMessageList.receiver._id);
+          setTapUser(resData.data.CreateMessageList.receiver._id);
+          setSidebarOpen(false);
+        } else {
+          setTapUser(inputUsername);
+          setSidebarOpen(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className="lg:w-80">
@@ -178,7 +233,7 @@ function ContactList({
                     className="flex justify-between mt-2 pt-2 bg-white  hover:shadow-lg rounded cursor-pointer transition"
                   >
                     <button
-                      onClick={() => setSidebarOpen(false)}
+                      onClick={() => confirmHandler(allContacts._id)}
                       className="w-full"
                     >
                       <div className="flex ">

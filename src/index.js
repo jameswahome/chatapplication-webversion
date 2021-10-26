@@ -16,12 +16,12 @@ import "jquery/dist/jquery.js";
 import "@popperjs/core/dist/umd/popper.js";
 import "bootstrap/dist/js/bootstrap.js";
 const httpLink = new HttpLink({
-  uri: "http://localhost:8080/api",
+  uri: "https://apimarketpalace.com/api",
   credentials: "include",
 });
 
 const wsLink = new WebSocketLink({
-  uri: "ws://localhost:8080/subscriptions",
+  uri: "wss://apimarketpalace.com/subscriptions",
   options: {
     reconnect: true,
   },

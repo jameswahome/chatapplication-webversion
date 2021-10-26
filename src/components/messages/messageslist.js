@@ -6,22 +6,21 @@ import modalConfirmHandler from "../../requests/sendMessage";
 
 const MessagesList = (props) => {
   const [text, setText] = useState("");
-  const AllMessages = props.allmessagez;
+
   const contextType = useContext(AuthContext);
-  const myConversations = AllMessages.slice().sort((a, b) => {
+
+  const AllMessages = props.allmessagez;
+
+  const myConversations = AllMessages[0].messageslists.slice().sort((a, b) => {
     const dateA = new Date(b.createdAt);
     const DateB = new Date(a.createdAt);
 
     return DateB - dateA;
   });
-  const creatorProfile = myConversations[0].user.profileimage;
 
-  let inputUsername;
-  if (myConversations[0].user.username === contextType.username) {
-    inputUsername = myConversations[0].creator.username;
-  } else {
-    inputUsername = myConversations[0].user.username;
-  }
+  const creatorProfile = AllMessages[0].receiver.profileimage;
+
+  const inputUsername = AllMessages[0].receiver.username;
 
   const handleSendMessage = () => {
     modalConfirmHandler({ text, inputUsername });
@@ -51,6 +50,7 @@ const MessagesList = (props) => {
                     d="M10 19l-7-7m0 0l7-7m-7 7h18"
                   />
                 </svg>{" "}
+                {/* profile pic for user your you're chatting with */}
                 {creatorProfile === null ? (
                   <img
                     src="https://res.cloudinary.com/jaymojay/image/upload/v1634151683/24-248253_user-profile-default-image-png-clipart-png-download_qm0dl0.png"
@@ -64,7 +64,11 @@ const MessagesList = (props) => {
                     alt="img"
                   />
                 )}
-                {myConversations[0].creator.username ===
+                {/* username for the person you're chatting with */}
+                <span className="text-xs font-medium text-white ml-2">
+                  {inputUsername}
+                </span>
+                {/* {myConversations[0].creator.username ===
                 contextType.username ? (
                   <span className="text-xs font-medium text-white ml-2">
                     {myConversations[0].user.username}
@@ -73,7 +77,7 @@ const MessagesList = (props) => {
                   <span className="text-xs font-medium text-white ml-2">
                     {myConversations[0].creator.username}
                   </span>
-                )}
+                )} */}
               </div>
               <div className="flex items-center">
                 {" "}
@@ -123,6 +127,7 @@ const MessagesList = (props) => {
             </nav>
             <div className="overflow-auto px-1 py-1 h-5/6">
               {myConversations.map((conversation) => {
+                // console.log(conversation);
                 return (
                   <li key={conversation._id} className="list-none">
                     {conversation.creator.username !== contextType.username ? (
