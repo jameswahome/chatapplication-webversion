@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import AuthContext from "../context/auth-context";
 import Spinner from "../components/spinner/spinner";
+import moment from "moment";
 
 function Sidebar({ sidebarOpen, setSidebarOpen, setContacts, setTapUser }) {
   const trigger = useRef(null);
@@ -311,7 +312,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts, setTapUser }) {
                         </button>
                         <div className="flex flex-col ">
                           {" "}
-                          <span className="text-gray-300">11:26</span>{" "}
+                          <span className="text-gray-300">
+                            {moment(customer.updatedAt).format("ddd, LT")}
+                          </span>{" "}
                           <i className="fa fa-star text-green-400"></i>{" "}
                         </div>
                       </li>

@@ -147,14 +147,18 @@ const MessagesList = (props) => {
                         )}
                         <span className="flex ml-1 h-auto bg-gray-900 text-gray-200 text-xs font-normal rounded-sm px-1 p-1 items-end">
                           {conversation.body}{" "}
-                          <span className="text-gray-400 pl-1 ">01:25am</span>
+                          <span className="text-gray-400 pl-1 ">
+                            {moment(conversation.createdAt).format("ddd, LT")}
+                          </span>
                         </span>{" "}
                       </div>
                     ) : (
                       <div className="flex justify-end pt-2 pl-10">
                         <span className="bg-green-900  h-auto text-gray-200 text-xs font-normal rounded-sm px-1 p-1 items-end flex justify-end ">
                           {conversation.body}
-                          <span className="text-gray-400 pl-1">02.30am</span>
+                          <span className="text-gray-400 pl-1">
+                            {moment(conversation.createdAt).format("ddd, LT")}
+                          </span>
                         </span>
                       </div>
                     )}

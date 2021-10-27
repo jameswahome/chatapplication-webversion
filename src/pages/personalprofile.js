@@ -13,14 +13,14 @@ export default function Personalprofile(props) {
     "https://res.cloudinary.com/jaymojay/image/upload/v1625326563/jidgpsk4h6ka9wsmobj7.jpg"
   );
 
-  const [CError, setCError] = useState();
+  // const [CError, setCError] = useState();
 
   const closeModal = () => {
     setIsOpen(false);
   };
-  const openModal = () => {
-    setIsOpen(true);
-  };
+  // const openModal = () => {
+  //   setIsOpen(true);
+  // };
   const usersprofile = gql`
   query{
     oneuser(username: "${props.match.params.creatorId}"){
@@ -46,8 +46,8 @@ export default function Personalprofile(props) {
   }
 
   const user = FetchUsersProfile();
-
-  const imageurl = user.profileimage;
+  console.log(user);
+  // const imageurl = user.profileimage;
 
   const uploadImage = (filename) => {
     setIsLoading(true);
@@ -111,9 +111,9 @@ export default function Personalprofile(props) {
           });
       })
       .catch((err) => {
-        setCError(
-          "invalid file. kindly ensure the selected image has an extention of png or jpeg"
-        );
+        // setCError(
+        //   "invalid file. kindly ensure the selected image has an extention of png or jpeg"
+        // );
         console.log(err);
         setIsLoading(false);
       });

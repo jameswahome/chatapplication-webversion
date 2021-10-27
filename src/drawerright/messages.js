@@ -79,7 +79,7 @@ export default function EventsPage(props) {
   if (error) return <EmptyMessage setContacts={props.setContacts} />;
 
   const myConversation = data.singleUserMessageList;
-  console.log(myConversation);
+
   const subscribeToNewTopics = () => {
     subscribeToMore({
       document: MessageSubscription,
