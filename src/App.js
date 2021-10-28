@@ -6,7 +6,6 @@ import { gql, useQuery } from "@apollo/client";
 import Messages from "./pages/messages";
 import ProfilePage from "./pages/profile";
 import AuthPage from "./pages/Auth";
-import MessageLayout from "./pages/MessagesLayout";
 import AuthContext from "./context/auth-context";
 import PersonalProfile from "./pages/personalprofile";
 import Spinner from "./components/spinner/spinner";
@@ -87,8 +86,8 @@ export default function App() {
       <>
         <main className="main-content">
           <Switch>
-            {token && <Redirect from="/" to="/index" exact />}
-            {token && <Redirect from="/auth" to="/index" exact />}
+            {token && <Redirect from="/" to="/messages" exact />}
+            {token && <Redirect from="/auth" to="/messages" exact />}
             {!token && <Route path="/auth" component={AuthPage} />}
             <Route path="/index" component={Messages} />
 
@@ -120,7 +119,6 @@ export default function App() {
           }}
         >
           <Switch>
-            <Route path="/meso" component={MessageLayout} />
             <Route path="/messages" component={Messages} />
             <Route component={AuthenticatedRoutes} />
           </Switch>

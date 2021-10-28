@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 import AuthContext from "../context/auth-context";
 import Spinner from "../components/spinner/spinner";
@@ -9,6 +10,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts, setTapUser }) {
   const sidebar = useRef(null);
   const contextType = useContext(AuthContext);
   const [dropItDown, setDropItDown] = useState(false);
+  const history = useHistory();
 
   // close on click outside
   useEffect(() => {
@@ -228,7 +230,10 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts, setTapUser }) {
             </div>
             <button
               className="transition-colors duration-200 block px-4  text-normal text-gray-900 rounded hover:bg-blue hover:text-white no-underline"
-              onClick={() => setDropItDown(false)}
+              onClick={() => {
+                setDropItDown(false);
+                history.push("auth");
+              }}
             >
               Logout
             </button>
@@ -299,11 +304,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen, setContacts, setTapUser }) {
                               </span>
                               {customer.messageslists[lastMessage] ===
                               undefined ? (
-                                <span className="text-sm text-gray-400 truncate w-32 ">
+                                <span className="text-sm text-gray-400 truncate w-32 -ml-16">
                                   {customer.body}
                                 </span>
                               ) : (
-                                <span className="text-sm text-gray-400 truncate w-32">
+                                <span className="text-sm text-gray-400 truncate w-32 ">
                                   {customer.messageslists[lastMessage].body}
                                 </span>
                               )}
